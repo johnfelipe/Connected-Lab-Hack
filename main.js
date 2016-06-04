@@ -1,4 +1,6 @@
 var http = require("http");
+var watson = require('watson-developer-cloud');
+var fs = require('fs');
 
 http.createServer(function (request, response) {
 
@@ -9,30 +11,35 @@ http.createServer(function (request, response) {
    
    // Send the response body as "Hello World"
    response.end('Hello World\n');
+
+    var speech_to_text = watson.speech_to_text({
+      url: "https://stream.watsonplatform.net/speech-to-text/api",
+      username: '14549245-6f4b-4af4-ba1f-62b4f8c33256',
+      password: 'A7RD8DSibX4F',
+      version: 'v1'
+    });
+
+    var params = {
+      // From file
+      audio: fs.createReadStream('speech.wav'),
+      content_type: 'audio/wav'
+    };
+    console.log("1");
+
+    speech_to_text.recognize(params, function(err, res) {
+      if (err)
+        console.log(err);
+      else{
+
+      }
+        console.log(JSON.stringify(res['results'][0]['alternatives'][0]['transcript'], null, 1));
+        //console.log(JSON.parse(res));
+    });
+    
+    console.log("done");
 }).listen(8081);
 
 // Console will print the message
 console.log('Server running at http://127.0.0.1:8081/');
 
 //tw5mbx
-
-{
-  "iotf-service": [
-    {
-      "name": "iot-phone-iotf-service",
-      "label": "iotf-service",
-      "plan": "iotf-service-free",
-      "credentials": {
-        "iotCredentialsIdentifier": "a2g6k39sl6r5",
-        "mqtt_host": "g93mm4.messaging.internetofthings.ibmcloud.com",
-        "mqtt_u_port": 1883,
-        "mqtt_s_port": 8883,
-        "base_uri": "https://g93mm4.internetofthings.ibmcloud.com:443/api/v0001",
-        "http_host": "g93mm4.internetofthings.ibmcloud.com",
-        "org": "g93mm4",
-        "apiKey": "a-g93mm4-fytqlqarei",
-        "apiToken": "U)D-hEQ(?4U?Zg*BFV"
-      }
-    }
-  ]
-}
