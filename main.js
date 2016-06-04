@@ -4,14 +4,9 @@ var express = require('express');
 var app = express();
 
 app.get('/',function (request, response) {
-
-   // Send the HTTP header 
-   // HTTP Status: 200 : OK
-   // Content Type: text/plain
-   response.writeHead(200, {'Content-Type': 'text/plain'});
    
    // Send the response body as "Hello World"
-   response.end('Hello World\n');
+   response.sendFile(__dirname+'/index.html');
 
     var speech_to_text = watson.speech_to_text({
       url: "https://stream.watsonplatform.net/speech-to-text/api",
@@ -25,7 +20,7 @@ app.get('/',function (request, response) {
       audio: fs.createReadStream('speech.wav'),
       content_type: 'audio/wav'
     };
-    console.log("1");
+    console.log(__dirname);
 
     speech_to_text.recognize(params, function(err, res) {
       if (err)
@@ -40,7 +35,10 @@ app.get('/',function (request, response) {
     console.log("done");
 });
 
-app.get('/benson',function (request, response) {console.log("benson")});
+app.get('/benson',function (request, response) {
+  console.log("Request: "+ request);
+  console.log("Response: "+ response);
+});
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
