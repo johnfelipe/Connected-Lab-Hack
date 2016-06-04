@@ -1,8 +1,9 @@
-var http = require("http");
 var watson = require('watson-developer-cloud');
 var fs = require('fs');
+var express = require('express');
+var app = express();
 
-http.createServer(function (request, response) {
+app.get('/',function (request, response) {
 
    // Send the HTTP header 
    // HTTP Status: 200 : OK
@@ -37,8 +38,10 @@ http.createServer(function (request, response) {
     });
     
     console.log("done");
-}).listen(8081);
+});
 
-// Console will print the message
-console.log('Server running at http://127.0.0.1:8081/');
+app.get('/benson',function (request, response) {console.log("benson")});
 
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!');
+});
